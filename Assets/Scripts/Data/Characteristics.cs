@@ -9,5 +9,11 @@ public class Characteristics : ScriptableObject
     public float Speed { get; private set; }
 
     [field: SerializeField]
+    public float AccelerationFactor { get; private set; }
+
+    [field: SerializeField]
+    public float MaxSpeed { get; private set; }
+
+    [field: SerializeField]
     public float Health { get; set; }
 }
