@@ -13,6 +13,11 @@ public abstract class Unit : MonoBehaviour
 
     protected abstract void Initialize();
 
+    public virtual Characteristics GetData()
+    {
+        return _unitData;
+    }
+
     public abstract void TakeDamage(float damage);
 
 }

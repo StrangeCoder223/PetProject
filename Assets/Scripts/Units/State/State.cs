@@ -5,7 +5,7 @@ using UnityEngine;
 
 public abstract class State
 {
-    public virtual void Init() { }
+    public abstract void Init(Unit unit);
     public abstract void Run();
 
 }

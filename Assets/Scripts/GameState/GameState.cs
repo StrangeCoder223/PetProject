@@ -11,8 +11,10 @@ public class GameState : MonoBehaviour
     public event OnGameState Lose;
     public event OnGameState Win;
     public event OnGameState AtPlay;
+    public event OnGameState Pause;
 
     #endregion
+
     [SerializeField]
     private Character _character;
 
@@ -32,16 +34,18 @@ public class GameState : MonoBehaviour
     {
         Type type = newState.GetType();
 
-        if (type == typeof(AliveState))
+        if (type == typeof(CharacterAliveState))
         {
             AtPlay?.Invoke();
         }
 
-        else if (type == typeof(DieState))
+        else if (type == typeof(CharacterDieState))
         {
             Lose?.Invoke();
         }
     }
+
+
     
 
 }

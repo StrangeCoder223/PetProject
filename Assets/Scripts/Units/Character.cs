@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(Animator))]
 public class Character : Unit
 {
     #region Delegates&Events
@@ -20,11 +19,15 @@ public class Character : Unit
         set
         {
             _currentState = value;
+            _currentState.Init(this);
             StateChanged?.Invoke(value);
         }
     }
 
-    private Animator _animator;
+    public Animator Animator { get; private set; }
+    public Rigidbody Physic { get; private set; }
+
+
     private State _currentState;
 
     private void OnEnable()
@@ -33,8 +36,10 @@ public class Character : Unit
     }
     protected override void Initialize()
     {
-        CurrentState = new AliveState();
-        _animator = GetComponent<Animator>();
+        Physic = GetComponent<Rigidbody>();
+        Animator = GetComponent<Animator>();
+        CurrentState = new CharacterAliveState();
+        
     }
 
     public override void TakeDamage(float damage)
@@ -42,7 +47,7 @@ public class Character : Unit
         Damaged?.Invoke(damage);
         if (_unitData.Health <= damage)
         {
-            CurrentState = new DieState(_animator);
+            CurrentState = new CharacterDieState();
         }
     }
 
