@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[CreateAssetMenu(fileName = "Characteristics", menuName = "Data/Characteristics")]
 public class Characteristics : ScriptableObject
 {
     [field: SerializeField]
