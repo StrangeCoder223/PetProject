@@ -16,3 +16,5 @@ MonoBehaviour:
   <AccelerationFactor>k__BackingField: 0.81
   <MaxSpeed>k__BackingField: 4.58
   <Health>k__BackingField: 100
+  <JumpForce>k__BackingField: 250
+  <GroundDistance>k__BackingField: 1.2

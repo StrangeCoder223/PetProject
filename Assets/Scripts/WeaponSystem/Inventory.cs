@@ -6,9 +6,7 @@ public class Inventory : MonoBehaviour
 {
     public Weapon CurrentWeapon { get; set; }
 
-    private List<Weapon> _weapons = new List<Weapon>();
-
-    private KeyBinder _binder;
+    [SerializeField] private List<Weapon> weapons = new List<Weapon>();
 
     private Weapon _previousWeapon;
 
@@ -16,18 +14,9 @@ public class Inventory : MonoBehaviour
 
     private void OnEnable()
     {
-        _binder = KeyBinder.instance;
-        _binder.ScrolledUp += NextWeapon;
-        _binder.ScrolledDown += PreviousWeapon;
-        _binder.Dropped += DropWeapon;
         _currentIndex = 0;
-    }
-
-    private void OnDisable()
-    {
-        _binder.ScrolledUp -= NextWeapon;
-        _binder.ScrolledDown -= PreviousWeapon;
-        _binder.Dropped -= DropWeapon;
+        _previousWeapon = weapons[_currentIndex];
+        ChangeWeapon(_currentIndex);
     }
 
     public void AddWeapon(Weapon weapon)
@@ -35,7 +24,7 @@ public class Inventory : MonoBehaviour
         
     }
 
-    private void DropWeapon()
+    public void DropWeapon()
     {
         if (CurrentWeapon.GetType() != typeof(MeleeWeapon))
         {
@@ -46,29 +35,29 @@ public class Inventory : MonoBehaviour
 
     private void ChangeWeapon(int index)
     {
-        CurrentWeapon = _weapons[index];
+        CurrentWeapon = weapons[index];
         _previousWeapon.gameObject.SetActive(false);
         CurrentWeapon.gameObject.SetActive(true);
     }
 
-    private void NextWeapon()
+    public void NextWeapon()
     {
-        _previousWeapon = _weapons[_currentIndex];
+        _previousWeapon = weapons[_currentIndex];
         _currentIndex++;
-        if (_currentIndex == _weapons.Count-1)
+        if (_currentIndex == weapons.Count-1)
         {
             _currentIndex = 0;
         }
         ChangeWeapon(_currentIndex);
     }
 
-    private void PreviousWeapon()
+    public void PreviousWeapon()
     {
-        _previousWeapon = _weapons[_currentIndex];
+        _previousWeapon = weapons[_currentIndex];
         _currentIndex--;
         if (_currentIndex < 0)
         {
-            _currentIndex = _weapons.Count-1;
+            _currentIndex = weapons.Count-1;
         }
         ChangeWeapon(_currentIndex);
     }

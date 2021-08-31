@@ -16,4 +16,10 @@ public class Characteristics : ScriptableObject
 
     [field: SerializeField]
     public float Health { get; set; }
+
+    [field: SerializeField]
+    public float JumpForce { get; set; }
+
+    [field: SerializeField]
+    public float GroundDistance { get; set; }
 }

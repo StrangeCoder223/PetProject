@@ -33,6 +33,10 @@ public class CharacterMovement
         {
             Move(_movementUnit.transform.right);
         }
+        if (OnGround() && Input.GetKeyDown(_binder.GetBinds(KeyType.Jump)))
+        {
+            Jump();
+        }
     }
 
     private void Move(Vector3 direction)
@@ -44,6 +48,19 @@ public class CharacterMovement
         }
         velocity += direction * _data.Speed * _data.AccelerationFactor;
         _movementUnit.Physic.velocity = velocity;
-        Debug.Log(_movementUnit.Physic.velocity);
+        
     }
+
+    private void Jump()
+    {
+        _movementUnit.Physic.AddForce(Vector3.up * _data.JumpForce, ForceMode.Acceleration);
+    }
+
+    private bool OnGround()
+    {
+        bool isGrounded = Physics.Raycast(_movementUnit.transform.position, -_movementUnit.transform.up, _data.GroundDistance);
+        return isGrounded;
+    }
+
+    
 }

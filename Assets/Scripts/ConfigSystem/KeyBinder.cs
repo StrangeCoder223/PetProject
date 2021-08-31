@@ -10,7 +10,11 @@ public enum KeyType
     Backward,
     Left,
     Right,
-    Escape
+    Escape,
+    Jump,
+    Drop,
+    Attack,
+    Aim
 }
 
 public class KeyBinder : MonoBehaviour
@@ -35,6 +39,10 @@ public class KeyBinder : MonoBehaviour
     public void BindKey(Text keyForBind, KeyType keyType)
     {
         StartCoroutine(WaitInput(keyForBind,keyType));
+    }
+    public KeyCode GetBinds(KeyType bind)
+    {
+        return keys[bind];
     }
 
     private IEnumerator WaitInput(Text keyForBind, KeyType keyType)
@@ -62,10 +70,9 @@ public class KeyBinder : MonoBehaviour
         keys.Add(KeyType.Left, KeyCode.A);
         keys.Add(KeyType.Right, KeyCode.D);
         keys.Add(KeyType.Escape, KeyCode.Escape);
-    }
-
-    public KeyCode GetBinds(KeyType bind)
-    {
-        return keys[bind];
+        keys.Add(KeyType.Jump, KeyCode.Space);
+        keys.Add(KeyType.Drop, KeyCode.G);
+        keys.Add(KeyType.Attack, KeyCode.Mouse0);
+        keys.Add(KeyType.Aim, KeyCode.Mouse1);
     }
 }

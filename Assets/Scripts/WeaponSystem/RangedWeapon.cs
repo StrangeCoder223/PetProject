@@ -13,4 +13,9 @@ public class RangedWeapon : Weapon
     {
         
     }
+
+    protected override void Shake()
+    {
+        throw new System.NotImplementedException();
+    }
 }

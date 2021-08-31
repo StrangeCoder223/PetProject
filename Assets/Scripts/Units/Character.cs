@@ -18,6 +18,11 @@ public class Character : Unit
         get => _currentState;
         set
         {
+            if (_currentState != null)
+            {
+                _currentState.Exit();
+            }
+
             _currentState = value;
             _currentState.Init(this);
             StateChanged?.Invoke(value);
@@ -27,6 +32,8 @@ public class Character : Unit
     public Animator Animator { get; private set; }
     public Rigidbody Physic { get; private set; }
 
+    [field: SerializeField]
+    public Inventory Inventory { get; private set; }
 
     private State _currentState;
 
@@ -34,12 +41,12 @@ public class Character : Unit
     {
         Initialize();
     }
+
     protected override void Initialize()
     {
         Physic = GetComponent<Rigidbody>();
         Animator = GetComponent<Animator>();
         CurrentState = new CharacterAliveState();
-        
     }
 
     public override void TakeDamage(float damage)
@@ -54,6 +61,7 @@ public class Character : Unit
     private void Update()
     {
         CurrentState.Run();
+        Debug.Log(CurrentState);
     }
 
     

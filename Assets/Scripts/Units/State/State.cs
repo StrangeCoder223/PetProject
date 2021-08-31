@@ -8,4 +8,6 @@ public abstract class State
     public abstract void Init(Unit unit);
     public abstract void Run();
 
+    public virtual void Exit() { }
+
 }
