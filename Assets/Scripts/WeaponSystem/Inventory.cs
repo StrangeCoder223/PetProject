@@ -15,8 +15,8 @@ public class Inventory : MonoBehaviour
     private void OnEnable()
     {
         _currentIndex = 0;
-        _previousWeapon = weapons[_currentIndex];
-        ChangeWeapon(_currentIndex);
+        UpdatePreviousWeapon();
+        ChangeWeapon(weapons[_currentIndex]);
     }
 
     public void AddWeapon(Weapon weapon)
@@ -33,32 +33,37 @@ public class Inventory : MonoBehaviour
         }
     }
 
-    private void ChangeWeapon(int index)
+    private void ChangeWeapon(Weapon newWeapon)
     {
-        CurrentWeapon = weapons[index];
+        CurrentWeapon = newWeapon;
         _previousWeapon.gameObject.SetActive(false);
         CurrentWeapon.gameObject.SetActive(true);
     }
 
     public void NextWeapon()
     {
-        _previousWeapon = weapons[_currentIndex];
+        UpdatePreviousWeapon();
         _currentIndex++;
         if (_currentIndex == weapons.Count-1)
         {
             _currentIndex = 0;
         }
-        ChangeWeapon(_currentIndex);
+        ChangeWeapon(weapons[_currentIndex]);
     }
 
     public void PreviousWeapon()
     {
-        _previousWeapon = weapons[_currentIndex];
+        UpdatePreviousWeapon();
         _currentIndex--;
         if (_currentIndex < 0)
         {
             _currentIndex = weapons.Count-1;
         }
-        ChangeWeapon(_currentIndex);
+        ChangeWeapon(weapons[_currentIndex]);
+    }
+
+    private void UpdatePreviousWeapon()
+    {
+        _previousWeapon = weapons[_currentIndex];
     }
 }
