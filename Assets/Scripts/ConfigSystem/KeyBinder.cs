@@ -19,15 +19,15 @@ public enum KeyType
 
 public class KeyBinder : MonoBehaviour
 {
-    public static KeyBinder instance;
+    public static KeyBinder Instance { get; private set; }
 
     private Dictionary<KeyType, KeyCode> keys = new Dictionary<KeyType, KeyCode>();
 
     private void Awake()
     {
-        if (instance == null)
+        if (Instance == null)
         {
-            instance = this;
+            Instance = this;
         }
     }
 

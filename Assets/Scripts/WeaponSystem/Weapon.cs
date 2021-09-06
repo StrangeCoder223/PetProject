@@ -16,8 +16,8 @@ public abstract class Weapon : MonoBehaviour
     [field: SerializeField]
     public GameObject DropPrefab { get; private set; }
 
-    public abstract void Attack();
-    public abstract void Aim();
-    protected abstract void Shake();
+    public abstract void Attack(bool isAttacking);
+    public abstract void Aim(bool isAimed);
+    protected abstract void Shake(bool isMoving);
     
 }

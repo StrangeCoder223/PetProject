@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(Animator))]
 public class MeleeWeapon : Weapon
 {
     private Animator _animator;
@@ -14,46 +15,34 @@ public class MeleeWeapon : Weapon
     private void OnEnable()
     {
         _animator = GetComponent<Animator>();
-    }
-
-    private void Awake()
-    {
-        _input = InputChecker.instance;
-    }
-
-    private void Start()
-    {
-        _input.Moved += Shake;
+        _input = InputChecker.Instance;
+        _input.Moving += Shake;
         _input.Attacked += Attack;
         _input.Aimed += Aim;
     }
 
     private void OnDisable()
     {
-        _input.Moved -= Shake;
+        _input.Moving -= Shake;
         _input.Attacked -= Attack;
         _input.Aimed -= Aim;
     }
 
-    public override void Aim()
+    public override void Aim(bool isAimed)
     {
-        PlayAnimTrigger(HardAttackName);
+        _animator.SetBool(HardAttackName, isAimed);
     }
 
-    public override void Attack()
+    public override void Attack(bool isAttacking)
     {
-        PlayAnimTrigger(AttackName);
+        _animator.SetBool(AttackName, isAttacking);
     }
 
-    protected override void Shake()
+    protected override void Shake(bool isMoving)
     {
-        PlayAnimTrigger(ShakeName);
+        _animator.SetBool(ShakeName, isMoving);
     }
 
-    private void PlayAnimTrigger(string name)
-    {
-        _animator.SetTrigger(name);
-        _animator.ResetTrigger(name);
-    }
+    
 
 }

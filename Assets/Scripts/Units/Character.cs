@@ -61,7 +61,6 @@ public class Character : Unit
     private void Update()
     {
         CurrentState.Run();
-        Debug.Log(CurrentState);
     }
 
     

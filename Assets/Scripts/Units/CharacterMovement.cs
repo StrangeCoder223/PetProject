@@ -12,7 +12,7 @@ public class CharacterMovement
     {
         _movementUnit = movementUnit;
         _data = _movementUnit.GetData();
-        _binder = KeyBinder.instance;
+        _binder = KeyBinder.Instance;
     }
 
     public void CheckMovement()

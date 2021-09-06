@@ -10,7 +10,7 @@ public class CharacterAliveState : State
     {
         _character = unit as Character;
         _movement = new CharacterMovement(_character);
-        _input = InputChecker.instance;
+        _input = InputChecker.Instance;
         _inventory = _character.Inventory;
         SubscribeOnEvents();
     }

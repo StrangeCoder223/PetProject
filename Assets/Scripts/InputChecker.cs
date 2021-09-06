@@ -12,69 +12,48 @@ public class InputChecker : MonoBehaviour
 
     public event OnEventHandler ScrolledUp;
     public event OnEventHandler ScrolledDown;
-    public event OnEventHandler Attacked;
-    public event OnEventHandler Aimed;
     public event OnEventHandler Moved;
-
     public event OnEventHandler Dropped;
 
     public event OnPressedHandler Moving;
+    public event OnPressedHandler Attacked;
+    public event OnPressedHandler Aimed;
 
 
     #endregion
 
-    public static InputChecker instance;
+    public static InputChecker Instance { get; private set; }
+
+    [SerializeField] private KeyBinder _binder;
 
     private float _scrollRatio;
     
-    private KeyBinder _binder;
+    
 
     private void OnEnable()
     {
-        _binder = KeyBinder.instance;
-        if (instance == null)
+        if (Instance == null)
         {
-            instance = this;
+            Instance = this;
         }
     }
 
     private void CheckKeyboard()
     {
-        CheckDrop();
+      //  CheckDrop();
         CheckMove();
     }
 
     private void CheckMove()
     {
-        if (Input.GetKey(_binder.GetBinds(KeyType.Forward)))
+        if (Input.GetKey(_binder.GetBinds(KeyType.Forward)) |
+            Input.GetKey(_binder.GetBinds(KeyType.Backward)) |
+            Input.GetKey(_binder.GetBinds(KeyType.Left)) |
+            Input.GetKey(_binder.GetBinds(KeyType.Right)))
         {
             Moving?.Invoke(true);
         }
-        else if (Input.GetKeyUp(_binder.GetBinds(KeyType.Forward)))
-        {
-            Moving?.Invoke(false);
-        }
-        if (Input.GetKey(_binder.GetBinds(KeyType.Backward)))
-        {
-            Moving?.Invoke(true);
-        }
-        else if (Input.GetKeyUp(_binder.GetBinds(KeyType.Backward)))
-        {
-            Moving?.Invoke(false);
-        }
-        if (Input.GetKey(_binder.GetBinds(KeyType.Right)))
-        {
-            Moving?.Invoke(true);
-        }
-        else if (Input.GetKeyUp(_binder.GetBinds(KeyType.Right)))
-        {
-            Moving?.Invoke(false);
-        }
-        if (Input.GetKey(_binder.GetBinds(KeyType.Left)))
-        {
-            Moving?.Invoke(true);
-        }
-        else if (Input.GetKeyUp(_binder.GetBinds(KeyType.Left)))
+        else
         {
             Moving?.Invoke(false);
         }
@@ -97,6 +76,7 @@ public class InputChecker : MonoBehaviour
     {
         if (Input.GetKeyDown(_binder.GetBinds(KeyType.Drop)))
         {
+            Debug.Log(_binder.GetBinds(KeyType.Drop));
             Dropped?.Invoke();
         }
     }
@@ -105,11 +85,19 @@ public class InputChecker : MonoBehaviour
     {
         if (Input.GetKey(_binder.GetBinds(KeyType.Attack)))
         {
-            Attacked?.Invoke();
+            Attacked?.Invoke(true);
+        }
+        else
+        {
+            Attacked?.Invoke(false);
         }
         if (Input.GetKey(_binder.GetBinds(KeyType.Aim)))
         {
-            Aimed?.Invoke();
+            Aimed?.Invoke(true);
+        }
+        else
+        {
+            Aimed?.Invoke(false);
         }
         CheckScroll();
     }
