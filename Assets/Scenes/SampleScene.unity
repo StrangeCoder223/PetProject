@@ -1586,6 +1586,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _unitData: {fileID: 11400000, guid: 39a169c26a82cd043a771b9be5c4f171, type: 2}
+  <Head>k__BackingField: {fileID: 1391376403}
   <Inventory>k__BackingField: {fileID: 446796744}
 --- !u!136 &1391375786
 CapsuleCollider:
@@ -1650,6 +1651,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sensetivity: 0.76
+  character: {fileID: 1391166192}
 --- !u!1 &1391384120
 GameObject:
   m_ObjectHideFlags: 0

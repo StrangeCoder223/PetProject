@@ -29,11 +29,13 @@ public class Character : Unit
         }
     }
 
-    public Animator Animator { get; private set; }
-    public Rigidbody Physic { get; private set; }
+    [field: SerializeField]
+    public MouseLook Head { get; private set; }
 
     [field: SerializeField]
     public Inventory Inventory { get; private set; }
+    public Animator Animator { get; private set; }
+    public Rigidbody Physic { get; private set; }
 
     private State _currentState;
 

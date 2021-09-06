@@ -9,17 +9,14 @@ public class Characteristics : ScriptableObject
     public float Speed { get; private set; }
 
     [field: SerializeField]
-    public float AccelerationFactor { get; private set; }
+    public float Health { get; private set; }
 
     [field: SerializeField]
-    public float MaxSpeed { get; private set; }
+    public float JumpForce { get; private set; }
 
     [field: SerializeField]
-    public float Health { get; set; }
+    public float GroundDistance { get; private set; }
 
     [field: SerializeField]
-    public float JumpForce { get; set; }
-
-    [field: SerializeField]
-    public float GroundDistance { get; set; }
+    public float GravityForce { get; private set; }
 }

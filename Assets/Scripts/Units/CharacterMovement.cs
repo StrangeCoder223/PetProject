@@ -7,7 +7,8 @@ public class CharacterMovement
     private Character _movementUnit;
     private Characteristics _data;
     private KeyBinder _binder;
-
+    private Vector3 _velocity;
+    private float _x, _z;
     public CharacterMovement(Character movementUnit)
     {
         _movementUnit = movementUnit;
@@ -19,41 +20,67 @@ public class CharacterMovement
     {
         if (Input.GetKey(_binder.GetBinds(KeyType.Forward)))
         {
-            Move(_movementUnit.transform.forward);
+            _z = 1;
+        }
+        else if (Input.GetKeyUp(_binder.GetBinds(KeyType.Forward)))
+        {
+            _z = 0;
         }
         if (Input.GetKey(_binder.GetBinds(KeyType.Backward)))
         {
-            Move(-_movementUnit.transform.forward);
+            _z = -1;
+        }
+        else if (Input.GetKeyUp(_binder.GetBinds(KeyType.Backward)))
+        {
+            _z = 0;
         }
         if (Input.GetKey(_binder.GetBinds(KeyType.Left)))
         {
-            Move(-_movementUnit.transform.right);
+            _x = -1;
+        }
+        else if (Input.GetKeyUp(_binder.GetBinds(KeyType.Left)))
+        {
+            _x = 0;
         }
         if (Input.GetKey(_binder.GetBinds(KeyType.Right)))
         {
-            Move(_movementUnit.transform.right);
+            _x = 1;
+        }
+        else if (Input.GetKeyUp(_binder.GetBinds(KeyType.Right)))
+        {
+            _x = 0;
         }
         if (OnGround() && Input.GetKeyDown(_binder.GetBinds(KeyType.Jump)))
         {
             Jump();
         }
+        else if (!OnGround())
+        {
+            ApplyGravity();
+        }
+        Move();
     }
 
-    private void Move(Vector3 direction)
+    private void Move()
     {
-        Vector3 velocity = _movementUnit.Physic.velocity;
-        if (velocity.magnitude >= _data.MaxSpeed)
-        {
-            velocity = Vector3.ClampMagnitude(velocity, _data.MaxSpeed);
-        }
-        velocity += direction * _data.Speed * _data.AccelerationFactor;
-        _movementUnit.Physic.velocity = velocity;
-        
+        Vector3 forward = _movementUnit.Head.GetTarget().forward;
+        Vector3 right = _movementUnit.Head.GetTarget().right;
+        _velocity = _movementUnit.Physic.velocity;
+        _velocity = (right * _x + forward * _z) * _data.Speed;
+        _velocity.y = _movementUnit.Physic.velocity.y;
+        ApplyVelocity();
+    }
+
+    private void ApplyVelocity()
+    {
+        _movementUnit.Physic.velocity = _velocity;
     }
 
     private void Jump()
     {
-        _movementUnit.Physic.AddForce(Vector3.up * _data.JumpForce, ForceMode.Acceleration);
+        Vector3 jumpVelocity = _movementUnit.Physic.velocity;
+        jumpVelocity.y = Mathf.Sqrt(_data.JumpForce * -2f * _data.GravityForce);
+        _movementUnit.Physic.velocity = jumpVelocity;
     }
 
     private bool OnGround()
@@ -62,5 +89,8 @@ public class CharacterMovement
         return isGrounded;
     }
 
-    
+    private void ApplyGravity()
+    {
+        _velocity.y = _data.GravityForce;
+    }
 }
