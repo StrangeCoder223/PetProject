@@ -18,6 +18,5 @@ public abstract class Unit : MonoBehaviour
         return _unitData;
     }
 
-    public abstract void TakeDamage(float damage);
-
+    public virtual void TakeDamage(float damage) { }
 }

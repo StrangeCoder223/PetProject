@@ -17,24 +17,22 @@ public class CharacterAliveState : State
 
     private void SubscribeOnEvents()
     {
-        _input.ScrolledUp += _inventory.NextWeapon;
-        _input.ScrolledDown += _inventory.PreviousWeapon;
+        _input.ScrolledUp += _inventory.NextSlot;
+        _input.ScrolledDown += _inventory.PreviousSlot;
         _input.Dropped += _inventory.DropWeapon;
-        _input.Attacked += _inventory.CurrentWeapon.Attack;
-        _input.Aimed += _inventory.CurrentWeapon.Aim;
     }
 
     private void DescribeFromEvents()
     {
-        _input.Attacked -= _inventory.CurrentWeapon.Attack;
-        _input.Aimed -= _inventory.CurrentWeapon.Aim;
-        _input.ScrolledUp -= _inventory.NextWeapon;
-        _input.ScrolledDown -= _inventory.PreviousWeapon;
+        _input.ScrolledUp -= _inventory.NextSlot;
+        _input.ScrolledDown -= _inventory.PreviousSlot;
         _input.Dropped -= _inventory.DropWeapon;
     }
 
     public override void Run()
     {
+        _inventory.CurrentSlot.Item.Attack(_input.IsAttack);
+        _inventory.CurrentSlot.Item.Aim(_input.IsAim);
         _movement.CheckMovement();
     }
 

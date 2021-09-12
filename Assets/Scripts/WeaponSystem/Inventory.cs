@@ -1,69 +1,127 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Inventory : MonoBehaviour
 {
-    public Weapon CurrentWeapon { get; set; }
+    public InventorySlot CurrentSlot
+    {
+        get => _currentSlot;
+        set
+        {
+            _currentSlot = value;
+            ChangeSlot(_currentSlot);
+        }
+    }
 
-    [SerializeField] private List<Weapon> weapons = new List<Weapon>();
+    [SerializeField]
+    private List<Weapon> weaponsPool = new List<Weapon>();
 
-    private Weapon _previousWeapon;
+    [SerializeField]
+    private List<InventorySlot> inventory = new List<InventorySlot>();
 
-    private int _currentIndex;
+    private InventorySlot _currentSlot;
+
+    [SerializeField]
+    private int _weaponSlotIndex = 0;
+    
 
     private void OnEnable()
     {
-        _currentIndex = 0;
-        UpdatePreviousWeapon();
-        ChangeWeapon(weapons[_currentIndex]);
+        Initialize();        
+    }
+
+    private void Initialize()
+    {
+
+        foreach (var slot in inventory)
+        {
+            slot.Index = inventory.IndexOf(slot);
+        }
+
+        CurrentSlot = inventory.Find(slot => slot.SlotType == WeaponType.Melee);
+        Debug.Log(_currentSlot);
     }
 
     public void AddWeapon(Weapon weapon)
     {
+        if (weapon.WeaponType != WeaponType.Melee)
+        {
+            var slot = inventory.Find(slot => slot.SlotType == weapon.WeaponType);
+            if (slot.IsEmpty)
+            {
+                slot.Item = weapon;
+                CurrentSlot = slot;
+            }
+            
+        }
         
+        else
+        {
+            throw new Exception("Оружие не относится к дополнительному или основному типу!");
+        }
+
     }
 
     public void DropWeapon()
     {
-        if (CurrentWeapon.GetType() != typeof(MeleeWeapon))
+        if (CurrentSlot.SlotType != WeaponType.Melee)
         {
-            GameObject dropped = Instantiate(CurrentWeapon.DropPrefab, transform.position, Quaternion.identity);
+            GameObject dropped = Instantiate(CurrentSlot.Item.DropPrefab, transform.position, Quaternion.identity);
             dropped.GetComponent<Rigidbody>().AddForce(transform.forward * 5f);
         }
     }
 
-    private void ChangeWeapon(Weapon newWeapon)
+    private void ChangeSlot(InventorySlot activeSlot)
     {
-        CurrentWeapon = newWeapon;
-        _previousWeapon.gameObject.SetActive(false);
-        CurrentWeapon.gameObject.SetActive(true);
-    }
-
-    public void NextWeapon()
-    {
-        UpdatePreviousWeapon();
-        _currentIndex++;
-        if (_currentIndex == weapons.Count-1)
+        foreach (var weapon in weaponsPool)
         {
-            _currentIndex = 0;
+            weapon.gameObject.SetActive(false);
         }
-        ChangeWeapon(weapons[_currentIndex]);
+
+        var changedWeapon = weaponsPool.Find(weapon => weapon.Name == activeSlot.Item.Name);
+        _weaponSlotIndex = activeSlot.Index;
+        changedWeapon.gameObject.SetActive(true);
     }
 
-    public void PreviousWeapon()
+    public void NextSlot()
     {
-        UpdatePreviousWeapon();
-        _currentIndex--;
-        if (_currentIndex < 0)
+        _weaponSlotIndex++;
+        for (; _weaponSlotIndex >= 0; _weaponSlotIndex++)
         {
-            _currentIndex = weapons.Count-1;
+            
+            if (_weaponSlotIndex > 2)
+            {
+                _weaponSlotIndex = 0;
+            }
+
+            if (!inventory[_weaponSlotIndex].IsEmpty)
+            {
+                CurrentSlot = inventory[_weaponSlotIndex];
+                break;
+            }
         }
-        ChangeWeapon(weapons[_currentIndex]);
+        
+        
     }
 
-    private void UpdatePreviousWeapon()
+    public void PreviousSlot()
     {
-        _previousWeapon = weapons[_currentIndex];
+        _weaponSlotIndex--;
+        for (; _weaponSlotIndex <= inventory.Count; _weaponSlotIndex--)
+        {
+            if (_weaponSlotIndex < 0)
+            {
+                _weaponSlotIndex = inventory.Count-1;
+            }
+
+            if (!inventory[_weaponSlotIndex].IsEmpty)
+            {
+                CurrentSlot = inventory[_weaponSlotIndex];
+                break;
+                
+            }
+        }
     }
 }

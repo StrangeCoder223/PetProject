@@ -2,8 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RangedWeapon : Weapon
+public class MainWeapon : Weapon
 {
+
+    private void OnEnable()
+    {
+        WeaponType = WeaponType.Main;
+    }
+
     public override void Aim(bool isAiming)
     {
         throw new System.NotImplementedException();

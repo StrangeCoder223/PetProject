@@ -24,6 +24,10 @@ public class InputChecker : MonoBehaviour
 
     public static InputChecker Instance { get; private set; }
 
+    public bool IsAttack { get; private set; }
+
+    public bool IsAim { get; private set; }
+
     [SerializeField] private KeyBinder _binder;
 
     private float _scrollRatio;
@@ -61,12 +65,12 @@ public class InputChecker : MonoBehaviour
 
     private void CheckScroll()
     {
-        _scrollRatio = Input.GetAxis("Mouse ScrollWheel");
-        if (_scrollRatio > 0.5f)
+        _scrollRatio = Input.GetAxisRaw("Mouse ScrollWheel");
+        if (_scrollRatio > 0)
         {
             ScrolledUp?.Invoke();
         }
-        else if (_scrollRatio < -0.5f)
+        else if (_scrollRatio < 0)
         {
             ScrolledDown?.Invoke();
         }
@@ -83,22 +87,8 @@ public class InputChecker : MonoBehaviour
 
     private void CheckMouse()
     {
-        if (Input.GetKey(_binder.GetBinds(KeyType.Attack)))
-        {
-            Attacked?.Invoke(true);
-        }
-        else
-        {
-            Attacked?.Invoke(false);
-        }
-        if (Input.GetKey(_binder.GetBinds(KeyType.Aim)))
-        {
-            Aimed?.Invoke(true);
-        }
-        else
-        {
-            Aimed?.Invoke(false);
-        }
+        IsAttack = Input.GetKey(_binder.GetBinds(KeyType.Attack));
+        IsAim = Input.GetKey(_binder.GetBinds(KeyType.Aim));
         CheckScroll();
     }
 
